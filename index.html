@@ -1,0 +1,3100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAPITAL - Valuable Insights, Intelligent Investments</title>
+    <meta name="description"
+        content="KAPITAL - Value investing approach aided by advanced quantitative models to identify the best opportunities amongst investable securities.">
+    <meta name="keywords"
+        content="KAPITAL, investment management, value investing, quantitative models, S Fund, LP, Texas">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.8/countUp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <style>
+        /* Custom Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --color-primary: #0a192f;
+            --color-secondary: #3a506b;
+            --color-accent: #1e90ff;
+            --color-accent-light: #64b5f6;
+            --color-dark: #121212;
+            --color-light: #f5f5f5;
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --transition-slow: 0.7s var(--ease-out-expo);
+            --transition-medium: 0.5s var(--ease-out-expo);
+            --transition-fast: 0.3s var(--ease-out-expo);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            color-scheme: dark;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .text-stroke {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+            color: transparent;
+        }
+
+        /* Slow zoom animation for background image */
+        @keyframes slowZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Background image with slow zoom */
+        .bg-zoom {
+            animation: slowZoom 25s linear forwards;
+            transform-origin: 40% center;
+        }
+
+        /* Water ripple effect */
+        .water-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Enhanced realistic water droplet styling */
+        .dew-droplet {
+            position: absolute;
+            background: radial-gradient(ellipse at 50% 35%,
+                    rgba(255, 255, 255, 0.98) 3%,
+                    rgba(220, 240, 255, 0.95) 10%,
+                    rgba(170, 215, 255, 0.85) 25%,
+                    rgba(120, 190, 250, 0.7) 40%,
+                    rgba(90, 170, 240, 0.5) 60%,
+                    rgba(70, 150, 230, 0.1) 90%,
+                    rgba(60, 130, 230, 0) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow:
+                inset -1px -1px 3px rgba(0, 0, 0, 0.15),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.9),
+                0 2px 4px rgba(120, 180, 255, 0.6);
+            transform: rotate(45deg);
+            z-index: 30;
+            opacity: 0.95;
+            backdrop-filter: blur(1px);
+        }
+
+        /* Water surface overlay */
+        .water-surface {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 35%;
+            background: linear-gradient(to bottom,
+                    rgba(0, 30, 60, 0) 0%,
+                    rgba(20, 50, 80, 0.05) 30%,
+                    rgba(30, 60, 100, 0.1) 50%,
+                    rgba(40, 70, 120, 0.15) 70%,
+                    rgba(50, 80, 140, 0.2) 100%);
+            backdrop-filter: blur(1px);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Water caustics effect */
+        .water-caustics {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjAzIiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlRGlzcGxhY2VtZW50U2NhbGUgc2NhbGU9IjMwIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1Ii8+PC9zdmc+');
+            background-size: 200% 200%;
+            opacity: 0.5;
+            z-index: 5;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+        /* New background shadow layer for the logo */
+        .logo-shadow-bg {
+            position: absolute;
+            background: radial-gradient(ellipse at center,
+                    rgba(0, 10, 30, 0.7) 0%,
+                    rgba(0, 10, 30, 0) 70%);
+            border-radius: 50%;
+            transform: translateY(10px);
+            filter: blur(15px);
+            z-index: 19;
+        }
+
+        /* Special style for the logo container - holds both parts of the logo */
+        .kapital-logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* The grid part style - positioned absolutely */
+        .grid-part {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 23;
+            /* Ensures the grid is on top */
+            clip-path: inset(0 87% 0 0);
+            /* Set clip-path immediately in CSS */
+        }
+
+        /* The text part style - will be inverted to white */
+        .text-part {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            transition: all var(--transition-medium);
+        }
+
+        .navbar.scrolled {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            background: rgba(10, 25, 47, 0.95);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+            transition: all var(--transition-fast);
+            opacity: 0.85;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+            transition: width var(--transition-fast);
+            transform-origin: left;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .magnetic-button {
+            position: relative;
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .menu-blur {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            opacity: 0;
+            transition: opacity var(--transition-medium);
+            pointer-events: none;
+            z-index: 90;
+        }
+
+        .menu-blur.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Section styling */
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 1px;
+            bottom: -10px;
+            left: 0;
+            background: linear-gradient(90deg, rgba(120, 190, 250, 1) 0%, rgba(120, 190, 250, 0) 100%);
+        }
+
+        /* Custom animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a192f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3a506b;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a6282;
+        }
+
+        /* Card hover effect */
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* File upload styling */
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            font-size: 100px;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Background gradient */
+        .bg-deep-gradient {
+            background: linear-gradient(to bottom, #0a192f, #172a46);
+        }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background-color: rgba(120, 190, 250, 0.3);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -0.5px;
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 10px 40px;
+            box-sizing: border-box;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #0077b6;
+            border: 2px solid #90e0ef;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::after {
+            right: -8px;
+        }
+
+        .right::after {
+            left: -8px;
+        }
+
+        /* Contact form styling */
+        .contact-input {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-input:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 2px rgba(120, 190, 250, 0.3);
+        }
+
+        /* Mobile responsive menu */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: rgba(0, 10, 30, 0.95);
+                padding: 1rem;
+            }
+
+            .nav-menu.show {
+                display: flex;
+            }
+
+            .timeline-container::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item::after {
+                left: 23px;
+            }
+
+            .right {
+                left: 0%;
+            }
+        }
+
+        /* Parallax effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Highlight text */
+        .highlight {
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 30%;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(120, 190, 250, 0.2);
+            z-index: -1;
+        }
+
+        /* Team member card */
+        .team-card {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-card img {
+            transition: transform 0.6s ease;
+        }
+
+        .team-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a192f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-top-color: #3a506b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Additional keyframes and styles */
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+
+            25% {
+                transform: translateY(-10px) translateX(10px);
+            }
+
+            50% {
+                transform: translateY(0) translateX(20px);
+            }
+
+            75% {
+                transform: translateY(10px) translateX(10px);
+            }
+
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+
+        .grid-pattern {
+            background-size: 20px 20px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        }
+
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        .pattern-dots {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .noise-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .careers-grid {
+            background-image: linear-gradient(to right, rgba(30, 144, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 144, 255, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .footer-grid {
+            background-image: linear-gradient(to right, rgba(30, 144, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 144, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .data-point:hover div:first-child {
+            animation: none;
+        }
+
+        .location-marker:hover div:nth-child(3) {
+            opacity: 1;
+        }
+
+        /* Navbar-specific logo styles */
+        .navbar .kapital-logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .navbar .text-part {
+            filter: brightness(0) invert(1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .navbar .grid-part {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 2;
+            /* This clip-path will show only the grid part of the logo */
+            clip-path: inset(0 87% 0 0);
+            /* No filter to maintain original grid color */
+            filter: none;
+        }
+
+        /* Ensure images scale together on hover */
+        .navbar .kapital-logo-container:hover .text-part,
+        .navbar .kapital-logo-container:hover .grid-part {
+            transform: scale(1.1);
+            transition: transform 0.7s;
+        }
+    </style>
+</head>
+
+<body class="m-0 p-0 overflow-x-hidden bg-black text-white">
+    <!-- Add this preloader HTML to the top of your body section -->
+    <div id="preloaderCurtain" class="fixed inset-0 z-[9999] flex flex-col pointer-events-none overflow-hidden">
+        <!-- Top curtain - this will lift up -->
+        <div id="preloaderTop" class="w-full h-full bg-[#0a192f] flex items-center justify-center flex-col">
+            <!-- Logo container -->
+            <div class="mb-10">
+                <div class="kapital-logo-container" style="height: 80px; width: auto;">
+                    <img src="kapital-removebg-preview.png" alt="KAPITAL Logo"
+                        class="text-part h-20 filter brightness-0 invert-[80%] opacity-70">
+                </div>
+            </div>
+    
+            <!-- Progress bar container -->
+            <div class="w-64 h-1 bg-blue-900/30 rounded-full overflow-hidden">
+                <div id="loaderProgress" class="h-full w-0 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div>
+            </div>
+    
+            <p class="text-blue-300/70 mt-4 text-sm font-light">LOADING</p>
+        </div>
+    </div>
+    
+    <!-- Add these styles to your existing stylesheet section -->
+    <style>
+        /* Preloader styles */
+        #preloaderCurtain {
+            will-change: transform;
+        }
+    
+        #preloaderTop {
+            will-change: transform;
+            transform-origin: center top;
+        }
+    
+        #loaderProgress {
+            transition: width 1.5s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+    
+        /* Ensure body doesn't scroll during loading */
+        body.loading {
+            overflow: hidden;
+        }
+    </style>
+    
+    <!-- Add this to your existing JavaScript section -->
+    <script>
+        // Wait for DOM ready
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add loading class to body
+            document.body.classList.add('loading');
+
+            // Get preloader elements
+            const preloaderTop = document.getElementById('preloaderTop');
+            const loaderProgress = document.getElementById('loaderProgress');
+            const preloaderCurtain = document.getElementById('preloaderCurtain');
+            const skylineImage = document.getElementById('skylineImage');
+
+            // Start progress animation
+            if (loaderProgress) {
+                // Animate to 80% to show something is happening
+                gsap.to(loaderProgress, {
+                    width: "80%",
+                    duration: 1.5,
+                    ease: "power2.inOut"
+                });
+            }
+
+            // Function to lift the curtain
+            function liftPreloaderCurtain() {
+                // Complete the progress bar first
+                if (loaderProgress) {
+                    gsap.to(loaderProgress, {
+                        width: "100%",
+                        duration: 0.5,
+                        ease: "power2.inOut",
+                        overwrite: true
+                    });
+                }
+
+                // Small delay to show the completed progress
+                setTimeout(() => {
+                    // Animate the curtain lifting up
+                    if (preloaderTop) {
+                        gsap.to(preloaderTop, {
+                            yPercent: -100,
+                            duration: 1.2,
+                            ease: "power3.inOut",
+                            onComplete: function () {
+                                // Remove preloader completely when animation is done
+                                if (preloaderCurtain) {
+                                    preloaderCurtain.style.display = "none";
+                                }
+
+                                // Remove loading class from body
+                                document.body.classList.remove('loading');
+
+                                // Now trigger the logo animation, but only if it hasn't already started
+                                if (!animationStarted && logoContainer) {
+                                    updateImageSizes();
+                                    animateLogoRising();
+                                }
+                            }
+                        });
+                    }
+                }, 400);
+            }
+
+            // Check if skyline image is already loaded
+            if (skylineImage) {
+                if (skylineImage.complete) {
+                    // Image already loaded, lift the curtain immediately
+                    liftPreloaderCurtain();
+                } else {
+                    // Image still loading, lift when it's done
+                    skylineImage.onload = liftPreloaderCurtain;
+
+                    // Fallback in case image fails or takes too long
+                    setTimeout(liftPreloaderCurtain, 5000);
+                }
+            } else {
+                // No skyline image found, lift the curtain anyway
+                liftPreloaderCurtain();
+            }
+
+            // We need to prevent the logo animation from starting before preloader finishes
+            // This is just in case it was set to autostart
+            const originalAnimateLogoRising = window.animateLogoRising;
+
+            if (originalAnimateLogoRising) {
+                // Override the original function
+                window.animateLogoRising = function () {
+                    // Don't start animation while preloader is visible
+                    if (preloaderCurtain && preloaderCurtain.style.display !== "none") {
+                        return;
+                    }
+
+                    // Call the original function
+                    originalAnimateLogoRising();
+                };
+            }
+        });
+    </script>
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-0 right-0 w-full h-full opacity-20 blur-3xl">
+            <!-- Softer, more diverse color palette with warmer tones mixed in -->
+            <div class="absolute top-[20%] right-[10%] w-[40vw] h-[30vw] bg-[#3a7ca5] rounded-full mix-blend-multiply filter blur-[80px] opacity-20 animate-pulse"
+                style="animation-duration: 10s;"></div>
+            <div class="absolute top-[40%] left-[10%] w-[40vw] h-[40vw] bg-[#e98074] rounded-full mix-blend-multiply filter blur-[80px] opacity-15 animate-pulse"
+                style="animation-duration: 15s;"></div>
+            <div class="absolute bottom-[10%] right-[30%] w-[30vw] h-[30vw] bg-[#6a8d73] rounded-full mix-blend-multiply filter blur-[80px] opacity-15 animate-pulse"
+                style="animation-duration: 13s;"></div>
+            <div class="absolute bottom-[30%] left-[30%] w-[25vw] h-[25vw] bg-[#e3d8b1] rounded-full mix-blend-multiply filter blur-[80px] opacity-10 animate-pulse"
+                style="animation-duration: 17s;"></div>
+        </div>
+        <div id="particles-js" class="absolute inset-0 opacity-20"></div>
+    </div>
+
+    <!-- Cursor Elements -->
+    <div class="cursor-dot hidden md:block fixed w-3 h-3 bg-white rounded-full pointer-events-none z-[200] opacity-0">
+    </div>
+    <div
+        class="cursor-outline hidden md:block fixed w-8 h-8 border border-white rounded-full pointer-events-none z-[200] opacity-0">
+    </div>
+
+    <!-- Navigation -->
+    <nav id="mainNav"
+        class="navbar fixed top-0 left-0 right-0 px-6 md:px-8 py-5 flex justify-between items-center transition-all duration-500">
+        <!-- Replace the current navbar logo section with this code -->
+        <a href="#home" class="flex items-center group">
+            <div class="overflow-hidden relative ml-24">
+                <!-- Container for the split logo effect -->
+                <div class="kapital-logo-container" style="height: 40px; width: auto;">
+                    <!-- Full logo with text part inverted to white -->
+                    <img src="kapital-removebg-preview.png" alt="KAPITAL Logo"
+                        class="text-part h-8 md:h-10 transform transition-transform duration-700 group-hover:scale-110">
+
+                    <!-- Grid part overlay (masked to show only grid) -->
+                    <img src="kapital-removebg-preview.png" alt="KAPITAL Logo Grid"
+                        class="grid-part h-8 md:h-10 transform transition-transform duration-700 group-hover:scale-110">
+                </div>
+            </div>
+        </a>
+        <div class="hidden lg:flex nav-menu space-x-8 items-center text-sm font-light mr-4 ">
+            <a href="#home" class="nav-link text-white hover:text-white tracking-wider">HOME</a>
+            <a href="#about" class="nav-link text-white hover:text-white tracking-wider">ABOUT</a>
+            <a href="#philosophy" class="nav-link text-white hover:text-white tracking-wider">PHILOSOPHY</a>
+            <a href="#careers" class="nav-link text-white hover:text-white tracking-wider">CAREERS</a>
+            <a href="#disclaimer" class="nav-link text-white hover:text-white tracking-wider">DISCLAIMER</a>
+            <a href="#contact" class="nav-link text-white hover:text-white tracking-wider">CONTACT</a>
+        </div>
+        <button class="lg:hidden hamburger focus:outline-none magnetic-button" data-magnetic="true">
+            <div class="relative w-8 h-6">
+                <span class="hamburger-line absolute h-0.5 w-8 bg-white transition-all duration-300"
+                    style="top: 0"></span>
+                <span class="hamburger-line absolute h-0.5 w-8 bg-white transition-all duration-300"
+                    style="top: 50%; transform: translateY(-50%)"></span>
+                <span class="hamburger-line absolute h-0.5 w-8 bg-white transition-all duration-300"
+                    style="bottom: 0"></span>
+            </div>
+        </button>
+    </nav>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="menu-blur">
+        <div class="mobile-menu fixed inset-0 flex items-center justify-center z-[95] pointer-events-none opacity-0">
+            <div class="w-full max-w-md text-center">
+                <div class="mobile-nav-items space-y-6 transform translate-y-8">
+                    <a href="#home" class="nav-link block py-3 text-3xl font-light tracking-widest">HOME</a>
+                    <a href="#about" class="nav-link block py-3 text-3xl font-light tracking-widest">ABOUT</a>
+                    <a href="#philosophy" class="nav-link block py-3 text-3xl font-light tracking-widest">PHILOSOPHY</a>
+                    <a href="#careers" class="nav-link block py-3 text-3xl font-light tracking-widest">CAREERS</a>
+                    <a href="#disclaimer" class="nav-link block py-3 text-3xl font-light tracking-widest">DISCLAIMER</a>
+                    <a href="#contact" class="nav-link block py-3 text-3xl font-light tracking-widest">CONTACT</a>
+                </div>
+                <div class="mt-16 transform translate-y-8 opacity-0 transition-all duration-700 delay-300">
+                    <p class="text-white opacity-70 mb-6">Connect with us</p>
+                    <div class="flex justify-center space-x-6">
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors duration-300">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors duration-300">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-blue-400 transition-colors duration-300">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Slow zoom animation for background image */
+        @keyframes slowZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Background image with slow zoom */
+        .bg-zoom {
+            animation: slowZoom 25s linear forwards;
+            transform-origin: 40% center;
+        }
+
+        /* Water ripple effect */
+        .water-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Enhanced realistic water droplet styling */
+        .dew-droplet {
+            position: absolute;
+            background: radial-gradient(ellipse at 50% 35%,
+                    rgba(255, 255, 255, 0.98) 3%,
+                    rgba(220, 240, 255, 0.95) 10%,
+                    rgba(170, 215, 255, 0.85) 25%,
+                    rgba(120, 190, 250, 0.7) 40%,
+                    rgba(90, 170, 240, 0.5) 60%,
+                    rgba(70, 150, 230, 0.1) 90%,
+                    rgba(60, 130, 230, 0) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow:
+                inset -1px -1px 3px rgba(0, 0, 0, 0.15),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.9),
+                0 2px 4px rgba(120, 180, 255, 0.6);
+            transform: rotate(45deg);
+            z-index: 30;
+            opacity: 0.95;
+            backdrop-filter: blur(1px);
+        }
+
+        /* Water surface overlay */
+        .water-surface {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 35%;
+            background: linear-gradient(to bottom,
+                    rgba(0, 30, 60, 0) 0%,
+                    rgba(20, 50, 80, 0.05) 30%,
+                    rgba(30, 60, 100, 0.1) 50%,
+                    rgba(40, 70, 120, 0.15) 70%,
+                    rgba(50, 80, 140, 0.2) 100%);
+            backdrop-filter: blur(1px);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Water caustics effect */
+        .water-caustics {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjAzIiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlRGlzcGxhY2VtZW50U2NhbGUgc2NhbGU9IjMwIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iLjA1Ii8+PC9zdmc+');
+            background-size: 200% 200%;
+            opacity: 0.5;
+            z-index: 5;
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+        }
+
+        /* New background shadow layer for the logo */
+        .logo-shadow-bg {
+            position: absolute;
+            background: radial-gradient(ellipse at center,
+                    rgba(0, 10, 30, 0.7) 0%,
+                    rgba(0, 10, 30, 0) 70%);
+            border-radius: 50%;
+            transform: translateY(10px);
+            filter: blur(15px);
+            z-index: 19;
+        }
+
+        /* Special style for the logo container - holds both parts of the logo */
+        .kapital-logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* The grid part style - positioned absolutely */
+        .grid-part {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 23;
+            /* Ensures the grid is on top */
+            clip-path: inset(0 87% 0 0);
+            /* Set clip-path immediately in CSS */
+        }
+
+        /* The text part style - will be inverted to white */
+        .text-part {
+            filter: brightness(0) invert(1);
+        }
+    </style>
+
+    <div class="relative w-full h-screen overflow-hidden">
+        <!-- Skyline background with zoom effect -->
+        <div class="absolute inset-0">
+            <div class="absolute inset-0">
+                <img src="hero.png" alt="Dallas Skyline" class="absolute w-full h-full object-cover bg-zoom"
+                    style="object-position: 20% center; width: calc(100% + 40px);" id="skylineImage">
+            </div>
+        </div>
+
+        <!-- Water surface overlay -->
+        <div class="water-surface"></div>
+
+        <!-- Water caustics effect -->
+        <div class="water-caustics" id="waterCaustics"></div>
+
+        <!-- Logo container positioned at the desired location -->
+        <div class="absolute" id="logoContainer" style="bottom:10%; left: 25%; z-index: 20;">
+            <div class="relative">
+                <!-- New soft background shadow for the logo -->
+                <div class="logo-shadow-bg" id="logoBackgroundShadow"></div>
+
+                <!-- Subtle logo shadow -->
+                <img src="kapital-removebg-preview.png" alt="KAPITAL Logo"
+                    style="position: absolute; filter: drop-shadow(0 0 12px rgba(20, 40, 80, 0.7)); opacity: 0;"
+                    id="logoShadow">
+
+                <!-- Special container for the split logo -->
+                <div class="kapital-logo-container" style="position: relative; z-index: 22; opacity: 0;" id="logo">
+                    <!-- Full logo with text part inverted to white -->
+                    <img src="kapital-removebg-preview.png" alt="KAPITAL Logo Text" id="textPartImg" class="text-part">
+
+                    <!-- Grid part overlay (will be masked to show only grid) -->
+                    <img src="kapital-removebg-preview.png" alt="KAPITAL Logo Grid" id="gridPartImg" class="grid-part">
+                </div>
+            </div>
+        </div>
+
+        <!-- Container for water ripples -->
+        <div id="waterRipples" class="absolute inset-0 overflow-hidden" style="pointer-events: none; z-index: 15;">
+        </div>
+
+        <!-- Container for dew droplets -->
+        <div id="dewDroplets" class="absolute inset-0 overflow-hidden" style="pointer-events: none; z-index: 25;"></div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="relative py-24 md:py-32">
+        <div class="absolute inset-0 bg-gradient-to-b from-black to-[#0a192f] z-0"></div>
+        <div class="absolute left-0 top-0 w-full h-40 bg-gradient-to-b from-black to-transparent z-10"></div>
+
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <div class="grid-bg absolute inset-0 opacity-10"></div>
+            <div class="absolute right-0 top-1/3 w-96 h-96 bg-blue-500 rounded-full filter blur-[120px] opacity-10 animate-pulse"
+                style="animation-duration: 8s;"></div>
+        </div>
+
+        <div class="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20">
+            <div class="mb-20">
+                <div class="overflow-hidden">
+                    <h2 class="section-tag text-xs md:text-sm uppercase tracking-[0.3em] text-blue-400 mb-4 font-light transform-gpu translate-y-8 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Who We Are</h2>
+                </div>
+                <div class="overflow-hidden">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium mb-6 transform-gpu translate-y-20 opacity-0"
+                        data-aos="fade-up" data-aos-delay="50" data-aos-once="false"
+                        data-aos-anchor-placement="top-bottom">
+                        About <span class="text-gradient">KAPITAL</span>
+                    </h2>
+                </div>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-300 transform-gpu translate-y-8 opacity-0"
+                    data-aos="fade-up" data-aos-delay="100" data-aos-once="false"
+                    data-aos-anchor-placement="top-bottom"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
+                <div class="order-2 lg:order-1" data-aos="fade-up" data-aos-delay="150" style="
+    margin-bottom: 130px;
+">
+                    <p class="text-gray-300 mb-8 leading-relaxed text-lg">
+                        <span class="text-xl font-medium text-white">Kapital LLC</span> is an investment management firm
+                        serving as the General Partner for S Fund, LP - an Investment Partnership based in Texas and
+                        established in 2022.
+                    </p>
+                    <p class="text-gray-300 mb-10 leading-relaxed text-lg">
+                        The fund uses a value investing approach aided by advanced quantitative models. We seek to
+                        identify and invest in the best opportunities amongst a broad number of investable
+                        securities and are focused on relatively liquid securities.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div
+                            class="stat-card overflow-hidden relative bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 group">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                            </div>
+                            <div class="relative z-10">
+                                <h4 class="font-monospace text-3xl md:text-4xl font-light text-white mb-2" id="countup1"
+                                    data-value="2022">0</h4>
+                                <p class="text-blue-300/80 font-light">Established</p>
+                            </div>
+                        </div>
+                        <div
+                            class="stat-card overflow-hidden relative bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 group">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                            </div>
+                            <div class="relative z-10">
+                                <h4 class="font-monospace text-3xl md:text-4xl font-light text-white mb-2" id="countup2"
+                                    data-value="98">0<span class="text-xl">%</span></h4>
+                                <p class="text-blue-300/80 font-light">Client Retention</p>
+                            </div>
+                        </div>
+                        <div
+                            class="stat-card overflow-hidden relative bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 group">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                            </div>
+                            <div class="relative z-10">
+                                <h4 class="font-monospace text-3xl md:text-4xl font-light text-white mb-2" id="countup3"
+                                    data-value="42">0<span class="text-xl">M</span></h4>
+                                <p class="text-blue-300/80 font-light">AUM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2 relative">
+                    <div class="relative z-10 rounded-xl overflow-hidden transform-gpu rotate-2" data-aos="fade-left"
+                        data-aos-delay="200">
+                        <div class="aspect-w-4 aspect-h-3 relative z-10">
+                            <img src="about_us.png" alt="KAPITAL Headquarters" class="w-full h-full object-cover">
+                        </div>
+
+                        <!-- Image Overlay Pattern -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-tr from-black/80 via-transparent to-transparent z-20">
+                        </div>
+                        <div class="pattern-dots absolute inset-0 opacity-10 z-10"></div>
+                    </div>
+
+                    <!-- Decorative Elements -->
+                    <div class="absolute -bottom-4 -right-4 w-3/4 h-3/4 border-2 border-blue-500/30 rounded-xl -z-10 transform-gpu -rotate-2"
+                        data-aos="fade-up" data-aos-delay="250"></div>
+                    <div class="absolute top-8 -left-8 w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full blur-2xl opacity-20 -z-10"
+                        data-aos="fade-in" data-aos-delay="300"></div>
+                </div>
+            </div>
+
+            <!-- Performance Metrics with Chart.js -->
+            <div class="mt-32" data-aos="fade-up">
+                <div class="overflow-hidden mb-12">
+                    <h3 class="text-2xl md:text-3xl font-medium mb-6 transform-gpu translate-y-12 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Investment <span
+                            class="text-gradient">Performance</span></h3>
+                </div>
+
+                <div class="bg-[#0d1a2d]/80 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-blue-900/30">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="col-span-2">
+                            <div class="w-full h-80 relative chart-container" id="chartContainer" data-aos="fade-right"
+                                data-aos-delay="100">
+                                <canvas id="performanceChart" class="w-full h-full"></canvas>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center" data-aos="fade-left" data-aos-delay="150">
+                            <h4 class="text-2xl font-light mb-6 text-white">Our Approach</h4>
+                            <ul class="space-y-4">
+                                <li class="flex items-start">
+                                    <div class="mr-3 mt-1">
+                                        <div class="w-4 h-4 rounded-full bg-blue-500"></div>
+                                    </div>
+                                    <p class="text-gray-300">Disciplined value investing strategy with quantitative
+                                        analysis</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="mr-3 mt-1">
+                                        <div class="w-4 h-4 rounded-full bg-purple-500"></div>
+                                    </div>
+                                    <p class="text-gray-300">Focus on undervalued liquid securities with growth
+                                        potential</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="mr-3 mt-1">
+                                        <div class="w-4 h-4 rounded-full bg-teal-500"></div>
+                                    </div>
+                                    <p class="text-gray-300">Rigorous financial statement analysis and fundamental
+                                        research</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expertise Areas -->
+            <div class="mt-32">
+                <div class="overflow-hidden mb-12">
+                    <h3 class="text-2xl md:text-3xl font-medium mb-6 transform-gpu translate-y-12 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Our <span
+                            class="text-gradient">Expertise</span></h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Expertise Card 1 -->
+                    <div class="expertise-card group" data-aos="fade-up">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div
+                                class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                            </div>
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-blue-400 text-2xl"></i>
+                                </div>
+                                <div
+                                    class="absolute w-full h-full top-0 left-0 bg-blue-500/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-light mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Quantitative Analysis</h4>
+                            <p class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">Advanced
+                                mathematical models to identify market inefficiencies and optimal investment
+                                opportunities.</p>
+                        </div>
+                    </div>
+
+                    <!-- Expertise Card 2 -->
+                    <div class="expertise-card group" data-aos="fade-up" data-aos-delay="50">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div
+                                class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                            </div>
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-chart-pie text-blue-400 text-2xl"></i>
+                                </div>
+                                <div
+                                    class="absolute w-full h-full top-0 left-0 bg-blue-500/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-light mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Asset Allocation</h4>
+                            <p class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">Strategic
+                                diversification across asset classes optimized for risk-adjusted returns in various
+                                market conditions.</p>
+                        </div>
+                    </div>
+
+                    <!-- Expertise Card 3 -->
+                    <div class="expertise-card group" data-aos="fade-up" data-aos-delay="100">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div
+                                class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                            </div>
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-balance-scale text-blue-400 text-2xl"></i>
+                                </div>
+                                <div
+                                    class="absolute w-full h-full top-0 left-0 bg-blue-500/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-light mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Risk Management</h4>
+                            <p class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                                Sophisticated risk assessment tools that identify and mitigate potential downside
+                                while preserving growth potential.</p>
+                        </div>
+                    </div>
+
+                    <!-- Expertise Card 4 -->
+                    <div class="expertise-card group" data-aos="fade-up" data-aos-delay="50">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div
+                                class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                            </div>
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-search-dollar text-blue-400 text-2xl"></i>
+                                </div>
+                                <div
+                                    class="absolute w-full h-full top-0 left-0 bg-blue-500/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-light mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Value Investing</h4>
+                            <p class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                                Identifying securities trading below their intrinsic value using comprehensive
+                                fundamental analysis and proprietary valuation models.</p>
+                        </div>
+                    </div>
+
+                    <!-- Expertise Card 5 -->
+                    <div class="expertise-card group" data-aos="fade-up" data-aos-delay="100">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div
+                                class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                            </div>
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-robot text-blue-400 text-2xl"></i>
+                                </div>
+                                <div
+                                    class="absolute w-full h-full top-0 left-0 bg-blue-500/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-light mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                AI-Powered Analytics</h4>
+                            <p class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                                Leveraging machine learning algorithms to analyze market data and identify patterns
+                                that traditional methods might miss.</p>
+                        </div>
+                    </div>
+
+                    <!-- Expertise Card 6 -->
+                    <div class="expertise-card group" data-aos="fade-up" data-aos-delay="150">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div
+                                class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                            </div>
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-globe-americas text-blue-400 text-2xl"></i>
+                                </div>
+                                <div
+                                    class="absolute w-full h-full top-0 left-0 bg-blue-500/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-light mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Global Macro Strategy</h4>
+                            <p class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                                Comprehensive analysis of economic trends, geopolitical events, and policy shifts to
+                                identify emerging opportunities across global markets.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section id="philosophy" class="relative py-28 md:py-40 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a192f] to-[#0d1b2a] z-0"></div>
+
+        <div class="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20">
+            <div class="mb-10">
+                <div class="overflow-hidden">
+                    <h2 class="section-tag text-xs md:text-sm uppercase tracking-[0.3em] text-blue-400 mb-2 font-light transform-gpu translate-y-4 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Our Principles
+                    </h2>
+                </div>
+                <div class="overflow-hidden">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium mb-4 transform-gpu translate-y-10 opacity-0"
+                        data-aos="fade-up" data-aos-delay="50" data-aos-once="false"
+                        data-aos-anchor-placement="top-bottom">
+                        Investment <span class="text-gradient">Philosophy</span>
+                    </h2>
+                </div>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-300 transform-gpu translate-y-4 opacity-0"
+                    data-aos="fade-up" data-aos-delay="100" data-aos-once="false"
+                    data-aos-anchor-placement="top-bottom">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+                <!-- Visualization/Image -->
+                <div class="lg:col-span-2 order-2 lg:order-1 relative" data-aos="fade-right">
+                    <div class="relative aspect-w-1 aspect-h-1 h-96">
+                        <!-- Placeholder Image with background effect -->
+                        <div class="absolute inset-0 rounded-xl overflow-hidden">
+                            <div
+                                class="w-full h-full bg-gradient-to-br from-[#0d2343] to-[#0e122b] p-4 flex items-center justify-center">
+                                <img src="philosophy.png" alt="Investment Philosophy Visualization"
+                                    class="object-cover rounded-lg opacity-80" />
+                                <!-- Overlay with grid pattern -->
+                                <div class="absolute inset-0 grid-bg opacity-40"></div>
+                                <!-- Subtle glow effect -->
+                                <div class="absolute inset-0 bg-blue-500/10 rounded-lg blur-md"></div>
+                            </div>
+                        </div>
+
+                        <!-- Decorative elements -->
+                        <div
+                            class="absolute -bottom-4 -right-4 w-full h-full border-2 border-blue-500/30 rounded-xl -z-10 transform rotate-3">
+                        </div>
+                        <div
+                            class="absolute top-8 -left-8 w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full blur-3xl opacity-20 -z-10">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="lg:col-span-3 order-1 lg:order-2" data-aos="fade-left">
+                    <div class="space-y-8">
+                        <div class="philosophy-point">
+                            <h3 class="text-xl md:text-2xl font-medium mb-4">Value-Oriented Approach</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                Value Investing is the disciplined application of fundamental analysis. We review
+                                financial
+                                statements and other observable information such as insider purchases or the overall
+                                economic environment in order to identify potentially undervalued businesses and
+                                securities.
+                            </p>
+                        </div>
+
+                        <div class="philosophy-point">
+                            <h3 class="text-xl md:text-2xl font-medium mb-4">Risk Management Focus</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                We view risk management as integral to our investment process, not separate from it.
+                                Our goal is to preserve capital while growing it steadily over time, avoiding
+                                excessive drawdowns that can impair long-term compounding.
+                            </p>
+                        </div>
+
+                        <div class="philosophy-point">
+                            <h3 class="text-xl md:text-2xl font-medium mb-4">Long-Term Perspective</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                We believe that adopting a long-term investment horizon is essential for capturing the
+                                full value of our investment thesis. Profits can be derived when and if the value of our
+                                investments is subsequently recognized by other market participants.
+                            </p>
+                        </div>
+
+                        <div class="mt-12">
+                            <a href="#contact"
+                                class="inline-block px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:from-blue-500 hover:to-blue-400 transform hover:-translate-y-1">
+                                Learn More About Our Approach
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Values section -->
+            <div class="mt-32">
+                <div class="overflow-hidden mb-12">
+                    <h3 class="text-2xl md:text-3xl font-medium mb-6 transform-gpu translate-y-12 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Our Core <span
+                            class="text-gradient">Values</span></h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Value Card 1 -->
+                    <div class="value-card group" data-aos="fade-up">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343]/70 to-[#0e122b]/70 p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-shield-alt text-blue-400 text-2xl"></i>
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-medium mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Integrity</h4>
+                            <p class="text-gray-300">We hold ourselves to the highest ethical standards, maintaining
+                                transparency in all our operations and investment decisions.</p>
+                        </div>
+                    </div>
+
+                    <!-- Value Card 2 -->
+                    <div class="value-card group" data-aos="fade-up" data-aos-delay="50">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343]/70 to-[#0e122b]/70 p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-brain text-blue-400 text-2xl"></i>
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-medium mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Intellectual Rigor</h4>
+                            <p class="text-gray-300">We embrace a culture of continuous learning, challenging
+                                assumptions, and applying analytical discipline to every investment decision.</p>
+                        </div>
+                    </div>
+
+                    <!-- Value Card 3 -->
+                    <div class="value-card group" data-aos="fade-up" data-aos-delay="100">
+                        <div
+                            class="relative overflow-hidden bg-gradient-to-br from-[#0d2343]/70 to-[#0e122b]/70 p-8 rounded-xl backdrop-blur-sm border border-blue-900/30 h-full transition-all duration-500 hover:translate-y-[-10px]">
+                            <div class="icon-container mb-6 relative">
+                                <div class="w-14 h-14 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                    <i class="fas fa-handshake text-blue-400 text-2xl"></i>
+                                </div>
+                            </div>
+                            <h4
+                                class="text-xl font-medium mb-4 text-white group-hover:text-blue-300 transition-colors duration-300">
+                                Client Partnership</h4>
+                            <p class="text-gray-300">We view our clients as partners, aligning our interests with theirs
+                                and prioritizing long-term relationships built on trust and performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Careers Section -->
+    <section id="careers" class="relative py-24 md:py-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0d1b2a] to-[#1b263b] z-0"></div>
+        <div class="absolute inset-0 careers-grid opacity-10 z-1"></div>
+
+        <div class="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20">
+            <div class="mb-10">
+                <div class="overflow-hidden">
+                    <h2 class="section-tag text-xs md:text-sm uppercase tracking-[0.3em] text-blue-400 mb-2 font-light transform-gpu translate-y-4 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Join Our Team
+                    </h2>
+                </div>
+                <div class="overflow-hidden">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium mb-4 transform-gpu translate-y-10 opacity-0"
+                        data-aos="fade-up" data-aos-delay="50" data-aos-once="false"
+                        data-aos-anchor-placement="top-bottom">
+                        Careers at <span class="text-gradient">KAPITAL</span>
+                    </h2>
+                </div>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-300 transform-gpu translate-y-4 opacity-0"
+                    data-aos="fade-up" data-aos-delay="100" data-aos-once="false"
+                    data-aos-anchor-placement="top-bottom">
+                </div>
+            </div>
+
+            <!-- Career Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div data-aos="fade-right">
+                    <p class="text-xl text-white font-light leading-relaxed mb-8">
+                        At KAPITAL, we're building a team of exceptional individuals who share our passion for
+                        investment excellence and client service. We foster a collaborative environment that
+                        rewards intellectual curiosity, analytical thinking, and dedication to results.
+                    </p>
+
+                    <div class="space-y-6 mb-24" style="margin-bottom: 330px;">
+                        <div class="flex items-start">
+                            <div class="mr-4 mt-1">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                    <i class="fas fa-check text-blue-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium text-white mb-2">Collaborative Culture</h4>
+                                <p class="text-gray-300">Work alongside talented professionals who challenge and support
+                                    each other to achieve excellence.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="mr-4 mt-1">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                    <i class="fas fa-check text-blue-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium text-white mb-2">Professional Development</h4>
+                                <p class="text-gray-300">Continuous learning opportunities through formal training,
+                                    mentorship, and hands-on experience.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="mr-4 mt-1">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                    <i class="fas fa-check text-blue-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-medium text-white mb-2">Competitive Compensation</h4>
+                                <p class="text-gray-300">Attractive salary, performance bonuses, and comprehensive
+                                    benefits package.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Form -->
+                <div data-aos="fade-left">
+                    <div class="bg-[#0d1a2d]/80 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-blue-900/30">
+                        <h3 class="text-2xl font-medium mb-6">Apply Now</h3>
+
+                        <form id="careerForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="firstName" class="block text-sm font-medium text-gray-300 mb-2">First
+                                        Name</label>
+                                    <input type="text" id="firstName" name="firstName"
+                                        class="contact-input w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label for="lastName" class="block text-sm font-medium text-gray-300 mb-2">Last
+                                        Name</label>
+                                    <input type="text" id="lastName" name="lastName"
+                                        class="contact-input w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                                <input type="email" id="email" name="email"
+                                    class="contact-input w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div>
+                                <label for="position" class="block text-sm font-medium text-gray-300 mb-2">Position of
+                                    Interest</label>
+                                <select id="position" name="position"
+                                    class="contact-input w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="" class="bg-[#0d1a2d]">Select a position</option>
+                                    <option value="Investment Analyst" class="bg-[#0d1a2d]">Investment Analyst</option>
+                                    <option value="Quantitative Researcher" class="bg-[#0d1a2d]">Quantitative Researcher
+                                    </option>
+                                    <option value="Data Scientist" class="bg-[#0d1a2d]">Data Scientist</option>
+                                    <option value="Client Relationship Manager" class="bg-[#0d1a2d]">Client Relationship
+                                        Manager</option>
+                                    <option value="Operations Associate" class="bg-[#0d1a2d]">Operations Associate
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-300 mb-2">Cover
+                                    Letter</label>
+                                <textarea id="message" name="message" rows="4"
+                                    class="contact-input w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Resume/CV</label>
+                                <div
+                                    class="file-upload w-full rounded-lg border border-dashed border-gray-600 py-6 px-4 text-center">
+                                    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+                                    <label for="resume" class="cursor-pointer">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
+                                            <p class="text-gray-400">Drag and drop your file here, or <span
+                                                    class="text-blue-400">browse</span></p>
+                                            <p id="file-name" class="text-sm text-gray-400 mt-2">No file selected</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit"
+                                    class="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:from-blue-500 hover:to-blue-400 transform hover:-translate-y-1">
+                                    Submit Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Section -->
+    <section id="disclaimer" class="relative py-24 md:py-32">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#1b263b] to-[#0d1b2a] z-0"></div>
+
+        <div class="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20">
+            <div class="mb-10">
+                <div class="overflow-hidden">
+                    <h2 class="section-tag text-xs md:text-sm uppercase tracking-[0.3em] text-blue-400 mb-2 font-light transform-gpu translate-y-4 opacity-0"
+                        data-aos="fade-up" data-aos-once="false" data-aos-anchor-placement="top-bottom">Legal
+                        Information
+                    </h2>
+                </div>
+                <div class="overflow-hidden">
+                    <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium mb-4 transform-gpu translate-y-10 opacity-0"
+                        data-aos="fade-up" data-aos-delay="50" data-aos-once="false"
+                        data-aos-anchor-placement="top-bottom">
+                        <span class="text-gradient">Disclaimer</span>
+                    </h2>
+                </div>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-300 transform-gpu translate-y-4 opacity-0"
+                    data-aos="fade-up" data-aos-delay="100" data-aos-once="false"
+                    data-aos-anchor-placement="top-bottom">
+                </div>
+            </div>
+
+            <div class="bg-[#0d1a2d]/80 backdrop-blur-sm p-6 md:p-8 rounded-xl border border-blue-900/30 max-w-4xl mx-auto"
+                data-aos="fade-up">
+                <div class="space-y-6 text-gray-300">
+                    <p class="leading-relaxed">
+                        This information is for informational purposes only and does not
+                        constitute an offer to sell or a solicitation to buy any securities.
+                    </p>
+
+                    <p class="leading-relaxed">
+                        This site may contain forward-looking statements which are subject to
+                        risks and uncertainties. Actual results may differ materially from those
+                        projected.
+                    </p>
+
+                    <p class="leading-relaxed">
+                        The fund is not registered under the Investment Company Act of 1940,
+                        and interests in the fund are exempt from registration under the
+                        Securities Act of 1933.
+                    </p>
+
+                    <p class="leading-relaxed">
+                        Past performance does not guarantee future results. The investment return and principal value of
+                        an investment in S Fund, LP will fluctuate so that an investor's units, when redeemed, may be
+                        worth more or less than their original cost. Current performance may be lower or higher than the
+                        performance data quoted.
+                    </p>
+
+                    <p class="leading-relaxed">
+                        Investment in S Fund, LP is suitable only for qualified investors that fully understand the
+                        risks of such investment. An investor should review the private placement memorandum to
+                        understand fully all risks before investing. S Fund, LP is a newly-formed entity with limited
+                        operating history.
+                    </p>
+
+                    <p class="leading-relaxed">
+                        Information contained on this website may have been produced by third parties and while KAPITAL
+                        LLC believes such third-party information is reliable, KAPITAL LLC cannot guarantee its
+                        accuracy, timeliness or completeness.
+                    </p>
+
+                    <p class="leading-relaxed">
+                        KAPITAL LLC is registered with the Securities and Exchange Commission under the Investment
+                        Advisers Act of 1940. Registration does not imply a certain level of skill or training.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative pt-24 pb-12 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-black to-[#050510] z-0"></div>
+        <div class="absolute inset-0 footer-grid opacity-10 z-1"></div>
+
+        <!-- Decorative Elements -->
+        <div
+            class="absolute left-0 bottom-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent">
+        </div>
+        <div class="absolute right-10 top-20 w-64 h-64 bg-blue-500 rounded-full filter blur-[120px] opacity-5"></div>
+        <div class="absolute left-20 bottom-10 w-80 h-80 bg-indigo-600 rounded-full filter blur-[150px] opacity-5">
+        </div>
+
+        <div class="container max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Company Info -->
+                <div>
+                    <div class="mb-8">
+                        <!-- Logo -->
+                        <div class="kapital-logo-container" style="height: 50px; width: auto;">
+                            <img src="kapital-removebg-preview.png" alt="KAPITAL Logo"
+                                class="text-part h-12 transform transition-transform duration-700">
+                            <img src="kapital-removebg-preview.png" alt="KAPITAL Logo Grid"
+                                class="grid-part h-12 transform transition-transform duration-700">
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        KAPITAL LLC is an investment management firm serving as the General Partner for S Fund, LP - a
+                        Texas-based investment partnership established in 2022.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            aria-label="Twitter">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+                            aria-label="Facebook">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-xl font-medium text-white mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#home"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-blue-500"></i>
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#about"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-blue-500"></i>
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#philosophy"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-blue-500"></i>
+                                Philosophy
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#careers"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-blue-500"></i>
+                                Careers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#disclaimer"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-blue-500"></i>
+                                Disclaimer
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#contact"
+                                class="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center">
+                                <i class="fas fa-chevron-right text-xs mr-2 text-blue-500"></i>
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-xl font-medium text-white mb-6">Contact Us</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-500 mt-1 mr-3"></i>
+                            <span class="text-gray-400">1100 Main Street, Suite 800<br>Dallas, TX 75201</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt text-blue-500 mt-1 mr-3"></i>
+                            <span class="text-gray-400">+1 (214) 555-0123</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope text-blue-500 mt-1 mr-3"></i>
+                            <span class="text-gray-400">info@kapitalinvest.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-globe text-blue-500 mt-1 mr-3"></i>
+                            <span class="text-gray-400">www.kapitalinvest.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-xl font-medium text-white mb-6">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">
+                        Subscribe to our newsletter for the latest updates on market insights and investment
+                        opportunities.
+                    </p>
+                    <form class="space-y-3">
+                        <div class="relative">
+                            <input type="email" placeholder="Your email address"
+                                class="w-full bg-[#0d1a2d]/80 border border-blue-900/40 rounded-lg py-3 px-4 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent">
+                        </div>
+                        <button type="submit"
+                            class="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-blue-900/20 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="text-gray-500 text-sm mb-4 md:mb-0">
+                        © 2022-2024 KAPITAL LLC. All rights reserved.
+                    </div>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors duration-300">Privacy
+                            Policy</a>
+                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-colors duration-300">Terms of
+                            Service</a>
+                        <a href="#disclaimer"
+                            class="text-gray-500 hover:text-blue-400 transition-colors duration-300">Disclaimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to top button -->
+        <div class="fixed bottom-8 right-8 z-50 opacity-0" id="backToTop">
+            <button
+                class="w-12 h-12 rounded-full bg-blue-600/80 hover:bg-blue-500/80 text-white shadow-lg flex items-center justify-center transition-all duration-300 transform hover:scale-110 backdrop-blur-sm">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Predefined droplet positions
+        const dropletPositions = [
+            // Bottom edges of letters - adjusted for better visual effect
+            { x: 0.12, y: 0.85, delay: 0.1, size: 0.9 },
+            { x: 0.18, y: 0.8, delay: 0.3, size: 1.1 },
+            { x: 0.25, y: 0.9, delay: 0.5, size: 0.8 },
+            { x: 0.32, y: 0.85, delay: 0.2, size: 1.0 },
+            { x: 0.41, y: 0.88, delay: 0.4, size: 0.9 },
+            { x: 0.48, y: 0.92, delay: 0.3, size: 1.2 },
+            { x: 0.55, y: 0.87, delay: 0.1, size: 0.7 },
+            { x: 0.61, y: 0.84, delay: 0.4, size: 1.0 },
+            { x: 0.68, y: 0.82, delay: 0.2, size: 0.8 },
+            { x: 0.75, y: 0.89, delay: 0.3, size: 1.1 },
+            { x: 0.82, y: 0.86, delay: 0.5, size: 0.9 },
+            // Additional droplets for more realistic effect
+            { x: 0.15, y: 0.75, delay: 0.6, size: 0.7 },
+            { x: 0.22, y: 0.78, delay: 0.2, size: 0.6 },
+            { x: 0.38, y: 0.76, delay: 0.5, size: 0.8 },
+            { x: 0.52, y: 0.79, delay: 0.3, size: 0.5 },
+            { x: 0.65, y: 0.77, delay: 0.7, size: 0.6 },
+            { x: 0.78, y: 0.81, delay: 0.4, size: 0.7 }
+        ];
+
+        // Track if animation has started
+        let animationStarted = false;
+
+        // Start initialization immediately when script runs
+        const logoContainer = document.getElementById('logoContainer');
+        const logo = document.getElementById('logo');
+        const logoShadow = document.getElementById('logoShadow');
+        const logoBackgroundShadow = document.getElementById('logoBackgroundShadow');
+        const dewDroplets = document.getElementById('dewDroplets');
+        const waterRipples = document.getElementById('waterRipples');
+        const waterCaustics = document.getElementById('waterCaustics');
+        const gridPartImg = document.getElementById('gridPartImg');
+        const textPartImg = document.getElementById('textPartImg');
+
+        // Set initial positions immediately
+        if (logoContainer) {
+            gsap.set(logoContainer, { y: 120, opacity: 0 });
+        }
+
+        // Immediately start the caustics animation
+        if (waterCaustics) {
+            gsap.to(waterCaustics, {
+                backgroundPosition: '0% 100%',
+                duration: 15,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true
+            });
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            // Make sure shadow has same dimensions as logo
+            if (textPartImg && gridPartImg && logoShadow) {
+                logoShadow.style.width = textPartImg.offsetWidth + "px";
+                logoShadow.style.height = textPartImg.offsetHeight + "px";
+
+                // Also adjust the grid part
+                gridPartImg.style.width = textPartImg.offsetWidth + "px";
+                gridPartImg.style.height = textPartImg.offsetHeight + "px";
+            }
+
+            updateBackgroundShadowSize();
+        });
+
+        function updateBackgroundShadowSize() {
+            // Set background shadow size based on logo
+            if (logo && logoBackgroundShadow) {
+                const logoRect = logo.getBoundingClientRect();
+                logoBackgroundShadow.style.width = (logoRect.width * 1.2) + "px";
+                logoBackgroundShadow.style.height = (logoRect.height * 0.4) + "px";
+                logoBackgroundShadow.style.left = ((logoRect.width - (logoRect.width * 1.2)) / 2) + "px";
+                logoBackgroundShadow.style.bottom = "-10px";
+            }
+        }
+
+        // Immediately set sizes - no delay
+        function updateImageSizes() {
+            if (!textPartImg || !gridPartImg || !logoShadow) return;
+
+            // Make sure images are the same size
+            gridPartImg.style.width = textPartImg.offsetWidth + "px";
+            gridPartImg.style.height = textPartImg.offsetHeight + "px";
+
+            // Set shadow dimensions
+            logoShadow.style.width = textPartImg.offsetWidth + "px";
+            logoShadow.style.height = textPartImg.offsetHeight + "px";
+
+            updateBackgroundShadowSize();
+        }
+
+        // Start animation as soon as possible
+        document.addEventListener('DOMContentLoaded', function () {
+            updateImageSizes();
+            animateLogoRising();
+        });
+
+        // As a fallback, also listen for images loaded
+        window.addEventListener('load', function () {
+            updateImageSizes();
+            if (!animationStarted) {
+                animateLogoRising();
+            }
+        });
+
+        function animateLogoRising() {
+            if (animationStarted || !logoContainer || !logo || !logoShadow || !logoBackgroundShadow || !gridPartImg || !textPartImg) return;
+
+            animationStarted = true;
+
+            console.log("Animation started");
+
+            // Create timeline for precise sequencing
+            const tl = gsap.timeline();
+
+            // Start with grid in normal color
+            gsap.set(gridPartImg, {
+                filter: "none"
+            });
+
+            // Add water ripple effect before logo appears
+            createWaterRipple(50 + Math.random() * 10);
+
+            // First distort the water surface slightly
+            tl.to('.water-surface', {
+                opacity: 0.7,
+                duration: 0.5,
+                ease: "power1.in"
+            });
+
+            // Then make logo slightly visible
+            tl.to(logo, {
+                opacity: 0.4,
+                duration: 0.3,
+                ease: "power1.in"
+            });
+
+            // Start inverting grid as the logo becomes visible - smoother transition
+            tl.to(gridPartImg, {
+                filter: "invert(0.3)",
+                duration: 0.6,
+                ease: "sine.inOut"
+            }, "-=0.2");
+
+            // Then animate logo rising with water-like physics - slower and smoother
+            tl.to(logoContainer, {
+                y: 0,
+                opacity: 1,
+                duration: 2.5, // Longer duration for smoother rise
+                ease: "elastic.out(0.8, 0.4)", // Softer elastic for smoother motion
+                onUpdate: function () {
+                    const progress = this.progress();
+                    if (progress > 0.3 && progress < 0.8) {
+                        // Create multiple ripples during rise
+                        if (Math.random() < 0.15) { // Reduced frequency
+                            createWaterRipple(20 + Math.random() * 30);
+                        }
+                    }
+
+                    if (progress > 0.5 && !document.querySelector('.dew-droplet')) {
+                        createDewDroplets();
+                    }
+                }
+            }, "-=0.1");
+
+            // Fade in the background shadow
+            tl.to(logoBackgroundShadow, {
+                opacity: 0.8,
+                duration: 1,
+                ease: "power1.inOut"
+            }, "-=2");
+
+            // Fade in the shadow
+            tl.to(logoShadow, {
+                opacity: 0.9,
+                duration: 1,
+                ease: "power1.inOut"
+            }, "-=1.5");
+
+            // Make logo fully visible with enhanced drop shadow for better contrast
+            tl.to(logo, {
+                opacity: 1,
+                duration: 0.8,
+                ease: "power1.out"
+            }, "-=1");
+
+            // Add drop shadow to text part
+            tl.to(textPartImg, {
+                filter: "brightness(0) invert(1) drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 3px rgba(200, 230, 255, 0.6))",
+                duration: 0.8,
+                ease: "power1.out"
+            }, "-=0.8");
+
+            // Add inverting effect to grid part, then back to normal - smoother transition
+            tl.to(gridPartImg, {
+                filter: "invert(0.8) drop-shadow(0 0 6px rgba(0, 0, 0, 0.5))",
+                duration: 1.2,
+                ease: "sine.inOut"
+            }, "-=0.8");
+
+            // Return grid to original color with smoother transition
+            tl.to(gridPartImg, {
+                filter: "invert(0) drop-shadow(0 0 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 3px rgba(200, 230, 255, 0.6))",
+                duration: 1.2,
+                ease: "sine.inOut"
+            }, "+=0.1");
+
+            // Generate final water splashes
+            tl.call(() => {
+                // Create multiple ripples
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        createWaterRipple(20 + Math.random() * 40);
+                    }, i * 200);
+                }
+            });
+
+            // Return water surface to subtle state
+            tl.to('.water-surface', {
+                opacity: 0.2,
+                duration: 1.5,
+                ease: "power2.out"
+            }, "-=0.5");
+
+            // Add continuous gentle floating motion after rise is complete
+            tl.call(() => {
+                // Apply subtle floating animation
+                gsap.to(logoContainer, {
+                    y: "-=5",
+                    duration: 2,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true
+                });
+
+                // Subtle shadow movement to match
+                gsap.to(logoBackgroundShadow, {
+                    opacity: "+=0.1",
+                    scale: 1.05,
+                    duration: 2,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true
+                });
+            });
+        }
+
+        function createDewDroplets() {
+            if (!logo || !dewDroplets) return;
+
+            const logoRect = logo.getBoundingClientRect();
+
+            // Create realistic dew droplets
+            dropletPositions.forEach((position, index) => {
+                // Create dew droplet
+                const droplet = document.createElement('div');
+                droplet.className = 'dew-droplet';
+
+                // Calculate absolute position based on logo size
+                const dropletX = logoRect.left + (position.x * logoRect.width);
+                const dropletY = logoRect.top + (position.y * logoRect.height);
+
+                // Set position
+                droplet.style.left = `${dropletX}px`;
+                droplet.style.top = `${dropletY}px`;
+
+                // Vary size for realistic water droplets
+                const baseSize = 8 * position.size;
+                droplet.style.width = `${baseSize}px`;
+                droplet.style.height = `${baseSize * 1.25}px`;
+
+                // Add to DOM
+                dewDroplets.appendChild(droplet);
+
+                // Set initial scale
+                gsap.set(droplet, { scale: 0, opacity: 0 });
+
+                // Make droplet appear with delay
+                gsap.to(droplet, {
+                    scale: 1,
+                    opacity: 0.95,
+                    duration: 0.3,
+                    delay: position.delay,
+                    ease: "back.out"
+                });
+
+                // Animate the droplet falling with realistic physics
+                gsap.to(droplet, {
+                    y: `+=${Math.random() * 120 + 180}`, // Fall down
+                    x: `${(Math.random() - 0.5) * 40}`, // Slight side movement
+                    opacity: 0,
+                    scale: 0.7,
+                    duration: 1.5 + Math.random() * 0.8,
+                    delay: position.delay + 0.3,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        // Remove droplet when animation completes
+                        if (dewDroplets.contains(droplet)) {
+                            dewDroplets.removeChild(droplet);
+                        }
+                    }
+                });
+            });
+        }
+
+        function createWaterRipple(size) {
+            if (!logoContainer || !waterRipples) return;
+
+            const logoRect = logoContainer.getBoundingClientRect();
+
+            // Calculate position at the bottom of the logo
+            const rippleX = logoRect.left + (logoRect.width / 2) + (Math.random() - 0.5) * logoRect.width * 0.8;
+            const rippleY = logoRect.bottom - (size / 4);
+
+            // Create ripple element
+            const ripple = document.createElement('div');
+            ripple.className = 'water-ripple';
+            ripple.style.left = `${rippleX}px`;
+            ripple.style.top = `${rippleY}px`;
+            ripple.style.width = `${size}px`;
+            ripple.style.height = `${size}px`;
+            waterRipples.appendChild(ripple);
+
+            // Animate ripple expanding and fading
+            gsap.fromTo(ripple,
+                {
+                    width: 0,
+                    height: 0,
+                    opacity: 0.9
+                },
+                {
+                    width: size * 2.5,
+                    height: size * 2.5,
+                    opacity: 0,
+                    duration: 1.5 + Math.random() * 0.5,
+                    ease: "power1.out",
+                    onComplete: () => {
+                        if (waterRipples.contains(ripple)) {
+                            waterRipples.removeChild(ripple);
+                        }
+                    }
+                }
+            );
+        }
+
+        // GSAP and ScrollTrigger Registration
+        document.addEventListener('DOMContentLoaded', function () {
+            // Register GSAP plugins when available
+            if (typeof gsap !== 'undefined') {
+                if (gsap.registerPlugin) {
+                    gsap.registerPlugin(ScrollTrigger);
+                }
+            }
+
+            // Handle curtain-style preloader
+            const preloaderTop = document.getElementById('preloaderTop');
+            const loaderProgress = document.getElementById('loaderProgress');
+            const preloaderCurtain = document.getElementById('preloaderCurtain');
+            const skylineImage = document.getElementById('skylineImage');
+
+            if (loaderProgress) {
+                // Animate the progress bar
+                gsap.to(loaderProgress, {
+                    width: "100%",
+                    duration: 1.5,
+                    ease: "power2.inOut"
+                });
+            }
+
+            // Wait for skyline image to load
+            if (skylineImage) {
+                if (skylineImage.complete) {
+                    // Image already loaded, lift the curtain immediately
+                    liftPreloaderCurtain();
+                } else {
+                    // Image still loading, lift when it's done
+                    skylineImage.onload = liftPreloaderCurtain;
+
+                    // Fallback in case image fails or takes too long
+                    setTimeout(liftPreloaderCurtain, 3000);
+                }
+            } else {
+                // No skyline image, just lift the curtain anyway
+                liftPreloaderCurtain();
+            }
+
+            function liftPreloaderCurtain() {
+                // First complete the progress bar if it hasn't finished
+                if (loaderProgress) {
+                    gsap.to(loaderProgress, {
+                        width: "100%",
+                        duration: 0.5,
+                        ease: "power2.inOut",
+                        overwrite: true
+                    });
+                }
+
+                // Small delay to show the completed progress
+                setTimeout(() => {
+                    // Animate the curtain lifting up
+                    if (preloaderTop) {
+                        gsap.to(preloaderTop, {
+                            yPercent: -100,
+                            duration: 1,
+                            ease: "power3.inOut",
+                            onComplete: function () {
+                                // Hide preloader completely when animation is done
+                                if (preloaderCurtain) {
+                                    preloaderCurtain.style.display = "none";
+                                }
+
+                                // Hide the spinner preloader too
+                                const preloader = document.getElementById("preloader");
+                                if (preloader) {
+                                    preloader.style.display = "none";
+                                }
+
+                                // Initialize other animations
+                                initAnimations();
+                            }
+                        });
+                    } else {
+                        // Fallback if elements don't exist
+                        const preloader = document.getElementById("preloader");
+                        if (preloader) {
+                            preloader.style.display = "none";
+                        }
+
+                        initAnimations();
+                    }
+                }, 300);
+            }
+        });
+
+        // Initialize all animations
+        function initAnimations() {
+            // Initialize AOS
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-out-cubic',
+                    once: false,
+                    offset: 100,
+                    delay: 0,
+                    mirror: false,
+                    anchorPlacement: 'top-bottom',
+                    disable: 'mobile'
+                });
+            }
+
+            // Start hero animation if present
+            if (document.getElementById('logoContainer')) {
+                updateImageSizes();
+                animateLogoRising();
+            }
+
+            // Initialize custom cursor
+            initCustomCursor();
+
+            // Initialize magnetic elements
+            initMagneticElements();
+
+            // Initialize mobile menu
+            initMobileMenu();
+
+            // Initialize scroll animations
+            initScrollAnimations();
+
+            // Initialize charts
+            initCharts();
+
+            // Initialize form handlers
+            initFormHandlers();
+
+            // Initialize back to top button
+            initBackToTop();
+
+            // Initialize navigation
+            initNavigation();
+
+            // Initialize particles
+            initParticles();
+
+            // Initialize countUp and stats animations
+            initCounters();
+        }
+
+        // Initialize countUp and stats animations
+        function initCounters() {
+            // Get all elements with countup ids
+            const countElements = document.querySelectorAll('[id^="countup"]');
+
+            if (countElements.length === 0) {
+                console.warn('No counter elements found');
+                return;
+            }
+
+            // Direct implementation of counting animation without relying on CountUp.js
+            // This ensures the counter will work even if the library fails to load
+            function animateValue(element, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    let value = Math.floor(progress * (end - start) + start);
+
+                    // Special case for year (2022)
+                    if (value === 2022) {
+                        // Do not add comma for the year
+                        element.innerHTML = value;
+                    }
+                    // Format with comma for thousands if needed (for other values)
+                    else if (value >= 1000) {
+                        value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                        // Append percentage sign if appropriate
+                        if (element.innerHTML.includes('%')) {
+                            element.innerHTML = value + '<span class="text-xl">%</span>';
+                        } else if (element.innerHTML.includes('M')) {
+                            element.innerHTML = value + '<span class="text-xl">M</span>';
+                        } else {
+                            element.innerHTML = value;
+                        }
+                    } else {
+                        // For small numbers, just set the value
+                        element.innerHTML = value;
+                    }
+
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+            // Use Intersection Observer for better detection of when counters come into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const elem = entry.target;
+                        const value = parseInt(elem.dataset.value) || 0;
+
+                        // First ensure we have the proper ending text stored
+                        let suffix = '';
+                        if (elem.textContent.includes('%')) {
+                            suffix = '<span class="text-xl">%</span>';
+                        } else if (elem.textContent.includes('M')) {
+                            suffix = '<span class="text-xl">M</span>';
+                        }
+
+                        // Check if this is the establishment year counter
+                        const isYearCounter = (value === 2022);
+
+                        if (typeof CountUp !== 'undefined') {
+                            // Configure CountUp with appropriate grouping setting
+                            const countUpConfig = {
+                                useEasing: true,
+                                useGrouping: !isYearCounter, // Disable grouping for year 2022
+                                separator: ',',
+                                decimal: '.',
+                                suffix: suffix
+                            };
+
+                            const countUp = new CountUp(elem.id, 0, value, 0, 2.5, countUpConfig);
+
+                            if (!countUp.error) {
+                                countUp.start();
+                            } else {
+                                // Fall back to our manual animation
+                                animateValue(elem, 0, value, 2500, isYearCounter);
+                            }
+                        } else {
+                            // CountUp not available, use our implementation
+                            animateValue(elem, 0, value, 2500, isYearCounter);
+                        }
+
+                        // Unobserve after animation starts
+                        observer.unobserve(elem);
+                    }
+                });
+            }, {
+                threshold: 0.1, // Trigger when at least 10% of the element is visible
+                rootMargin: '0px 0px -10% 0px' // Start animation slightly before the element is fully in view
+            });
+
+            // Observe all counter elements
+            countElements.forEach(elem => {
+                observer.observe(elem);
+            });
+
+            // Add pulse animation to stat cards with more subtle effect
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                // Glow effect
+                gsap.to(card, {
+                    boxShadow: '0 8px 32px rgba(30, 144, 255, 0.2)',
+                    duration: 2,
+                    repeat: -1,
+                    yoyo: true,
+                    delay: index * 0.3
+                });
+
+                // Add hover animation for better interaction
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        y: -10,
+                        boxShadow: '0 15px 35px rgba(30, 144, 255, 0.3)',
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        y: 0,
+                        boxShadow: '0 8px 32px rgba(30, 144, 255, 0.2)',
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                });
+            });
+        }
+
+        // Initialize custom cursor
+        function initCustomCursor() {
+            const cursor = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+
+            if (!cursor || !cursorOutline) return;
+
+            // Show cursors
+            gsap.to([cursor, cursorOutline], {
+                opacity: 1,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+
+            // Function to update cursor position
+            function updateCursor(e) {
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.1,
+                    ease: "power1.out"
+                });
+
+                gsap.to(cursorOutline, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            }
+
+            // Event listeners
+            document.addEventListener('mousemove', updateCursor);
+
+            // Links and buttons hover effect
+            const links = document.querySelectorAll('a, button, .hover-effect');
+
+            links.forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    gsap.to(cursorOutline, {
+                        scale: 1.5,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+
+                link.addEventListener('mouseleave', () => {
+                    gsap.to(cursorOutline, {
+                        scale: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+            });
+        }
+
+        // Initialize magnetic elements
+        function initMagneticElements() {
+            const magneticElements = document.querySelectorAll('[data-magnetic="true"]');
+
+            magneticElements.forEach(elem => {
+                elem.addEventListener('mousemove', function (e) {
+                    const rect = this.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    const moveX = (e.clientX - centerX) * 0.2;
+                    const moveY = (e.clientY - centerY) * 0.2;
+
+                    gsap.to(this, {
+                        x: moveX,
+                        y: moveY,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                });
+
+                elem.addEventListener('mouseleave', function () {
+                    gsap.to(this, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                });
+            });
+        }
+
+        // Initialize mobile menu
+        function initMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const menuBlur = document.querySelector('.menu-blur');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            if (!hamburger || !menuBlur || !mobileMenu) return;
+
+            const navItems = document.querySelectorAll('.mobile-nav-items a');
+            const socialLinks = document.querySelector('.mobile-menu .transform');
+
+            // Toggle menu state
+            let isMenuOpen = false;
+
+            hamburger.addEventListener('click', function () {
+                isMenuOpen = !isMenuOpen;
+
+                // Toggle active class on menu blur
+                menuBlur.classList.toggle('active');
+
+                // Animate hamburger lines
+                const hamburgerLines = this.querySelectorAll('.hamburger-line');
+
+                if (isMenuOpen) {
+                    // Show mobile menu
+                    gsap.to(mobileMenu, {
+                        opacity: 1,
+                        pointerEvents: 'all',
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    // Animate hamburger to X
+                    gsap.to(hamburgerLines[0], {
+                        top: "50%",
+                        rotate: 45,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    gsap.to(hamburgerLines[1], {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    gsap.to(hamburgerLines[2], {
+                        bottom: "50%",
+                        rotate: -45,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    // Animate nav items
+                    gsap.to(navItems, {
+                        y: 0,
+                        opacity: 1,
+                        stagger: 0.05,
+                        duration: 0.5,
+                        delay: 0.2,
+                        ease: "power2.out"
+                    });
+
+                    // Animate social links
+                    gsap.to(socialLinks, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.5,
+                        delay: 0.4,
+                        ease: "power2.out"
+                    });
+                } else {
+                    // Hide mobile menu
+                    gsap.to(mobileMenu, {
+                        opacity: 0,
+                        pointerEvents: 'none',
+                        duration: 0.3,
+                        delay: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    // Animate X to hamburger
+                    gsap.to(hamburgerLines[0], {
+                        top: 0,
+                        rotate: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    gsap.to(hamburgerLines[1], {
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    gsap.to(hamburgerLines[2], {
+                        bottom: 0,
+                        rotate: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+
+                    // Reset nav items
+                    gsap.to(navItems, {
+                        y: 8,
+                        opacity: 0,
+                        stagger: 0.05,
+                        duration: 0.3,
+                        ease: "power2.in"
+                    });
+
+                    // Reset social links
+                    gsap.to(socialLinks, {
+                        y: 8,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.in"
+                    });
+                }
+            });
+
+            // Close menu when clicking on nav links
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    hamburger.click();
+                });
+            });
+        }
+
+        // Initialize scroll animations
+        function initScrollAnimations() {
+            // Skip if ScrollTrigger is not available
+            if (typeof ScrollTrigger === 'undefined') return;
+
+            // Navbar animation on scroll
+            const navbar = document.getElementById('mainNav');
+
+            if (navbar) {
+                ScrollTrigger.create({
+                    start: "top -10%",
+                    onEnter: () => navbar.classList.add('scrolled'),
+                    onLeaveBack: () => navbar.classList.remove('scrolled')
+                });
+            }
+
+            // Animate sections on scroll
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach(section => {
+                // Create parallax effect for section backgrounds
+                const background = section.querySelector('.parallax-image');
+
+                if (background) {
+                    const speed = background.dataset.speed || 0.1;
+
+                    gsap.to(background, {
+                        y: `${window.innerHeight * speed * -1}px`,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: section,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: true
+                        }
+                    });
+                }
+
+                // Animate section titles
+                const sectionTags = section.querySelectorAll('.section-tag');
+                const sectionTitles = section.querySelectorAll('h2:not(.section-tag)');
+                const sectionDividers = section.querySelectorAll('.w-24.h-1');
+
+                // Animate section tags - improved for better responsiveness
+                sectionTags.forEach(tag => {
+                    gsap.set(tag, { y: 20, opacity: 0 });
+
+                    ScrollTrigger.create({
+                        trigger: tag,
+                        start: "top 85%",
+                        onEnter: () => {
+                            gsap.to(tag, {
+                                y: 0,
+                                opacity: 1,
+                                duration: 0.6,
+                                ease: "power2.out",
+                            });
+                        },
+                        once: false
+                    });
+                });
+
+                // Animate section titles - improved for better responsiveness
+                sectionTitles.forEach(title => {
+                    gsap.set(title, { y: 30, opacity: 0 });
+
+                    ScrollTrigger.create({
+                        trigger: title,
+                        start: "top 85%",
+                        onEnter: () => {
+                            gsap.to(title, {
+                                y: 0,
+                                opacity: 1,
+                                duration: 0.8,
+                                delay: 0.1,
+                                ease: "power2.out",
+                            });
+                        },
+                        once: false
+                    });
+                });
+
+                // Animate section dividers - improved for better responsiveness
+                sectionDividers.forEach(divider => {
+                    gsap.set(divider, { y: 15, opacity: 0 });
+
+                    ScrollTrigger.create({
+                        trigger: divider,
+                        start: "top 85%",
+                        onEnter: () => {
+                            gsap.to(divider, {
+                                y: 0,
+                                opacity: 1,
+                                duration: 0.6,
+                                delay: 0.2,
+                                ease: "power2.out",
+                            });
+                        },
+                        once: false
+                    });
+                });
+            });
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Skip if Chart is not available
+            if (typeof Chart === 'undefined') return;
+
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart');
+            const chartContainer = document.getElementById('chartContainer');
+
+            if (performanceCtx && chartContainer) {
+                let chartInstance = null;
+
+                // Create the chart when it enters the viewport
+                const chartObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !chartInstance) {
+                            // Create chart instance
+                            chartInstance = new Chart(performanceCtx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['2022 Q3', '2022 Q4', '2023 Q1', '2023 Q2', '2023 Q3', '2023 Q4', '2024 Q1', '2024 Q2'],
+                                    datasets: [
+                                        {
+                                            label: 'S Fund Performance',
+                                            data: [0, 5.2, 8.7, 12.1, 9.8, 14.6, 17.2, 19.5],
+                                            borderColor: 'rgba(66, 135, 245, 1)',
+                                            backgroundColor: 'rgba(66, 135, 245, 0.1)',
+                                            fill: true,
+                                            tension: 0.4,
+                                            borderWidth: 3
+                                        },
+                                        {
+                                            label: 'Market Benchmark',
+                                            data: [0, 3.1, 5.2, 7.8, 6.5, 9.2, 10.5, 12.1],
+                                            borderColor: 'rgba(153, 102, 255, 1)',
+                                            backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                                            fill: true,
+                                            tension: 0.4,
+                                            borderWidth: 3
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    animation: {
+                                        duration: 2000,
+                                        easing: 'easeOutQuart'
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                            labels: {
+                                                color: 'rgba(255, 255, 255, 0.7)',
+                                                font: {
+                                                    family: 'Inter'
+                                                }
+                                            }
+                                        },
+                                        tooltip: {
+                                            mode: 'index',
+                                            intersect: false,
+                                            backgroundColor: 'rgba(13, 26, 45, 0.9)',
+                                            titleColor: 'rgba(255, 255, 255, 0.9)',
+                                            bodyColor: 'rgba(255, 255, 255, 0.7)',
+                                            borderColor: 'rgba(66, 135, 245, 0.3)',
+                                            borderWidth: 1,
+                                            padding: 12,
+                                            bodyFont: {
+                                                family: 'Inter'
+                                            },
+                                            titleFont: {
+                                                family: 'Inter',
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: {
+                                                color: 'rgba(255, 255, 255, 0.05)'
+                                            },
+                                            ticks: {
+                                                color: 'rgba(255, 255, 255, 0.7)'
+                                            }
+                                        },
+                                        y: {
+                                            grid: {
+                                                color: 'rgba(255, 255, 255, 0.05)'
+                                            },
+                                            ticks: {
+                                                color: 'rgba(255, 255, 255, 0.7)',
+                                                callback: function (value) {
+                                                    return value + '%';
+                                                }
+                                            }
+                                        }
+                                    },
+                                    interaction: {
+                                        mode: 'nearest',
+                                        axis: 'x',
+                                        intersect: false
+                                    },
+                                    elements: {
+                                        point: {
+                                            radius: 3,
+                                            hoverRadius: 5
+                                        }
+                                    }
+                                }
+                            });
+
+                            // Unobserve after chart is created
+                            chartObserver.unobserve(chartContainer);
+                        }
+                    });
+                }, { threshold: 0.2 });
+
+                // Start observing the chart container
+                chartObserver.observe(chartContainer);
+            }
+        }
+
+        // Initialize form handlers
+        function initFormHandlers() {
+            // File upload field
+            const fileInput = document.getElementById('resume');
+            const fileNameDisplay = document.getElementById('file-name');
+
+            if (fileInput && fileNameDisplay) {
+                fileInput.addEventListener('change', function (e) {
+                    if (e.target.files.length > 0) {
+                        fileNameDisplay.textContent = e.target.files[0].name;
+                        fileNameDisplay.classList.remove('text-gray-400');
+                        fileNameDisplay.classList.add('text-white');
+                    } else {
+                        fileNameDisplay.textContent = 'No file selected';
+                        fileNameDisplay.classList.remove('text-white');
+                        fileNameDisplay.classList.add('text-gray-400');
+                    }
+                });
+            }
+
+            // Form submission handlers
+            const forms = document.querySelectorAll('form');
+
+            forms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    // Create notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-8 right-8 bg-green-600/90 text-white py-3 px-5 rounded-lg shadow-lg transform translate-y-[-20px] opacity-0 z-[100] backdrop-blur-sm';
+                    notification.innerHTML = '<div class="flex items-center"><i class="fas fa-check-circle mr-3"></i><span>Form submitted successfully!</span></div>';
+                    document.body.appendChild(notification);
+
+                    // Animate notification
+                    gsap.to(notification, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: "power2.out",
+                        onComplete: function () {
+                            // Reset form
+                            form.reset();
+
+                            if (form.id === 'careerForm' && fileNameDisplay) {
+                                fileNameDisplay.textContent = 'No file selected';
+                                fileNameDisplay.classList.remove('text-white');
+                                fileNameDisplay.classList.add('text-gray-400');
+                            }
+
+                            // Hide notification after delay
+                            gsap.to(notification, {
+                                y: -20,
+                                opacity: 0,
+                                duration: 0.5,
+                                delay: 3,
+                                ease: "power2.in",
+                                onComplete: function () {
+                                    document.body.removeChild(notification);
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        }
+
+        // Initialize back to top button
+        function initBackToTop() {
+            const backToTopBtn = document.getElementById('backToTop');
+
+            if (!backToTopBtn) return;
+
+            // Show/hide button based on scroll position
+            window.addEventListener('scroll', function () {
+                if (window.pageYOffset > 300) {
+                    gsap.to(backToTopBtn, {
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else {
+                    gsap.to(backToTopBtn, {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
+            });
+
+            // Scroll to top when clicked
+            backToTopBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initialize navigation
+        function initNavigation() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const target = document.querySelector(this.getAttribute('href'));
+
+                    if (!target) return;
+
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        }
+
+        // Initialize particles
+        function initParticles() {
+            // Simplified particles using DOM elements
+            const particlesContainers = document.querySelectorAll('#particles-js, .contact-particles');
+
+            particlesContainers.forEach(container => {
+                if (!container) return;
+
+                // Create particles
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'absolute rounded-full pointer-events-none';
+
+                    // Random size
+                    const size = Math.random() * 3 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+
+                    // Random position
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+
+                    // Random color
+                    const hue = Math.random() * 60 + 200; // Blue-ish
+                    particle.style.backgroundColor = `hsla(${hue}, 70%, 70%, ${Math.random() * 0.5 + 0.1})`;
+
+                    // Add animation
+                    particle.style.animation = `float ${Math.random() * 20 + 10}s infinite linear`;
+                    particle.style.animationDelay = `${Math.random() * 10}s`;
+
+                    container.appendChild(particle);
+                }
+            });
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            // Update logo dimensions
+            if (document.getElementById('textPartImg')) {
+                updateImageSizes();
+            }
+        });
+    </script>
+</body>
+
+</html>
