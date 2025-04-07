@@ -726,11 +726,48 @@
                     }, 400);
                 }
 
-                // Function to handle hero image load
+                // Enhanced function to ensure image is fully rendered
+                function ensureFullyRendered(callback) {
+                    // Use requestAnimationFrame to wait for browser painting
+                    requestAnimationFrame(function () {
+                        // Use another frame to ensure we're past the paint
+                        requestAnimationFrame(function () {
+                            // Add a delay to ensure the image has fully rendered at high quality
+                            setTimeout(callback, 800);
+                        });
+                    });
+                }
+
+                // Function to handle hero image load with enhanced rendering detection
                 function onHeroImageLoaded() {
-                    console.log('Hero image loaded');
-                    heroImageLoaded = true;
-                    liftPreloaderCurtain();
+                    console.log('Hero image loaded, ensuring full rendering');
+
+                    if (typeof heroImage.decode === 'function') {
+                        // Modern browsers: use decode() method to ensure image is fully decoded
+                        heroImage.decode()
+                            .then(function () {
+                                console.log('Image decoded, ensuring rendering completes');
+                                ensureFullyRendered(function () {
+                                    heroImageLoaded = true;
+                                    liftPreloaderCurtain();
+                                });
+                            })
+                            .catch(function () {
+                                console.log('Image decode failed, using fallback');
+                                // Fallback if decode fails
+                                ensureFullyRendered(function () {
+                                    heroImageLoaded = true;
+                                    liftPreloaderCurtain();
+                                });
+                            });
+                    } else {
+                        // Older browsers: use a longer timeout to ensure rendering completes
+                        console.log('Browser does not support decode, using timeout');
+                        ensureFullyRendered(function () {
+                            heroImageLoaded = true;
+                            liftPreloaderCurtain();
+                        });
+                    }
                 }
 
                 // Check if hero image exists and handle its loading
@@ -738,7 +775,7 @@
                     console.log('Found hero image, checking if loaded');
 
                     if (heroImage.complete) {
-                        console.log('Hero image already loaded');
+                        console.log('Hero image already complete, ensuring rendering');
                         onHeroImageLoaded();
                     } else {
                         console.log('Waiting for hero image to load');
@@ -747,20 +784,28 @@
                         // Also handle error case to prevent getting stuck
                         heroImage.onerror = function () {
                             console.log('Hero image failed to load');
-                            onHeroImageLoaded(); // Proceed anyway
+                            // Proceed anyway, but after a delay to maintain user experience
+                            setTimeout(function () {
+                                heroImageLoaded = true;
+                                liftPreloaderCurtain();
+                            }, 800);
                         };
                     }
                 } else {
                     console.log('Hero image not found');
                     // If hero image doesn't exist, show preloader for a minimum time then lift
-                    setTimeout(liftPreloaderCurtain, 1500);
+                    setTimeout(function () {
+                        heroImageLoaded = true;
+                        liftPreloaderCurtain();
+                    }, 1500);
                 }
 
                 // Fallback timer in case something goes wrong with image loading
-                const maxWaitTime = 5000; // Maximum wait time in milliseconds
+                const maxWaitTime = 8000; // Extended maximum wait time to 8 seconds
                 setTimeout(function () {
                     if (!heroImageLoaded) {
                         console.log('Max wait time reached, forcing preloader to lift');
+                        heroImageLoaded = true;
                         liftPreloaderCurtain();
                     }
                 }, maxWaitTime);
