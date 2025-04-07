@@ -664,14 +664,10 @@
                 const preloaderCurtain = document.getElementById('preloaderCurtain');
 
                 // Get the hero image specifically
-                const heroImage = document.getElementById('skylineImage');
+                const skylineImage = document.getElementById('skylineImage');
 
-                // Track if hero image has loaded
-                let heroImageLoaded = false;
-
-                // Start progress animation
+                // Start progress animation to show activity
                 if (loaderProgress) {
-                    // Animate to 80% to show something is happening
                     gsap.to(loaderProgress, {
                         width: "80%",
                         duration: 1.5,
@@ -681,7 +677,7 @@
 
                 // Function to lift the curtain
                 function liftPreloaderCurtain() {
-                    console.log('Lifting preloader curtain');
+                    console.log('Hero image loaded, lifting preloader curtain');
 
                     // Complete the progress bar first
                     if (loaderProgress) {
@@ -726,88 +722,52 @@
                     }, 400);
                 }
 
-                // Enhanced function to ensure image is fully rendered
-                function ensureFullyRendered(callback) {
-                    // Use requestAnimationFrame to wait for browser painting
-                    requestAnimationFrame(function () {
-                        // Use another frame to ensure we're past the paint
-                        requestAnimationFrame(function () {
-                            // Add a delay to ensure the image has fully rendered at high quality
-                            setTimeout(callback, 800);
-                        });
+                // Looking for the skyline image
+                if (skylineImage) {
+                    // Add event listener for load event
+                    skylineImage.addEventListener('load', function () {
+                        console.log('Skyline image load event fired');
+
+                        // Use a slight delay to ensure rendering is complete
+                        // This is based on the Zentucky approach that waits for rendering
+                        setTimeout(liftPreloaderCurtain, 200);
                     });
-                }
 
-                // Function to handle hero image load with enhanced rendering detection
-                function onHeroImageLoaded() {
-                    console.log('Hero image loaded, ensuring full rendering');
+                    // Also check if it's already loaded
+                    if (skylineImage.complete) {
+                        console.log('Skyline image already complete');
 
-                    if (typeof heroImage.decode === 'function') {
-                        // Modern browsers: use decode() method to ensure image is fully decoded
-                        heroImage.decode()
-                            .then(function () {
-                                console.log('Image decoded, ensuring rendering completes');
-                                ensureFullyRendered(function () {
-                                    heroImageLoaded = true;
-                                    liftPreloaderCurtain();
-                                });
-                            })
-                            .catch(function () {
-                                console.log('Image decode failed, using fallback');
-                                // Fallback if decode fails
-                                ensureFullyRendered(function () {
-                                    heroImageLoaded = true;
-                                    liftPreloaderCurtain();
-                                });
-                            });
+                        // Check if the image actually has dimensions
+                        if (skylineImage.naturalWidth && skylineImage.naturalHeight) {
+                            console.log('Skyline image has dimensions, ready to display');
+                            setTimeout(liftPreloaderCurtain, 200);
+                        } else {
+                            console.log('Skyline image complete but no dimensions yet, waiting...');
+
+                            // For images that report complete but aren't actually rendered yet
+                            // This is a fallback for some browsers
+                            const checkLoaded = setInterval(function () {
+                                if (skylineImage.naturalWidth && skylineImage.naturalHeight) {
+                                    clearInterval(checkLoaded);
+                                    console.log('Skyline image dimensions now available');
+                                    setTimeout(liftPreloaderCurtain, 200);
+                                }
+                            }, 100);
+                        }
                     } else {
-                        // Older browsers: use a longer timeout to ensure rendering completes
-                        console.log('Browser does not support decode, using timeout');
-                        ensureFullyRendered(function () {
-                            heroImageLoaded = true;
-                            liftPreloaderCurtain();
-                        });
-                    }
-                }
-
-                // Check if hero image exists and handle its loading
-                if (heroImage) {
-                    console.log('Found hero image, checking if loaded');
-
-                    if (heroImage.complete) {
-                        console.log('Hero image already complete, ensuring rendering');
-                        onHeroImageLoaded();
-                    } else {
-                        console.log('Waiting for hero image to load');
-                        heroImage.onload = onHeroImageLoaded;
-
-                        // Also handle error case to prevent getting stuck
-                        heroImage.onerror = function () {
-                            console.log('Hero image failed to load');
-                            // Proceed anyway, but after a delay to maintain user experience
-                            setTimeout(function () {
-                                heroImageLoaded = true;
-                                liftPreloaderCurtain();
-                            }, 800);
-                        };
+                        console.log('Skyline image not yet loaded, waiting for load event');
                     }
                 } else {
-                    console.log('Hero image not found');
+                    console.log('Skyline image element not found');
                     // If hero image doesn't exist, show preloader for a minimum time then lift
-                    setTimeout(function () {
-                        heroImageLoaded = true;
-                        liftPreloaderCurtain();
-                    }, 1500);
+                    setTimeout(liftPreloaderCurtain, 2000);
                 }
 
                 // Fallback timer in case something goes wrong with image loading
-                const maxWaitTime = 8000; // Extended maximum wait time to 8 seconds
+                const maxWaitTime = 8000; // Maximum wait time in milliseconds - increased for reliability
                 setTimeout(function () {
-                    if (!heroImageLoaded) {
-                        console.log('Max wait time reached, forcing preloader to lift');
-                        heroImageLoaded = true;
-                        liftPreloaderCurtain();
-                    }
+                    console.log('Max wait time reached, forcing preloader to lift');
+                    liftPreloaderCurtain();
                 }, maxWaitTime);
 
                 // Prevent logo animation from starting before preloader finishes
