@@ -662,12 +662,12 @@
                 const preloaderTop = document.getElementById('preloaderTop');
                 const loaderProgress = document.getElementById('loaderProgress');
                 const preloaderCurtain = document.getElementById('preloaderCurtain');
-                const skylineImage = document.getElementById('skylineImage');
-                const preloaderLogo = document.querySelector('#preloaderCurtain .kapital-logo-container img');
 
-                // Keep track of loaded images
-                const imagesToLoad = [];
-                let imagesLoaded = 0;
+                // Get the hero image specifically
+                const heroImage = document.getElementById('skylineImage');
+
+                // Track if hero image has loaded
+                let heroImageLoaded = false;
 
                 // Start progress animation
                 if (loaderProgress) {
@@ -681,6 +681,8 @@
 
                 // Function to lift the curtain
                 function liftPreloaderCurtain() {
+                    console.log('Lifting preloader curtain');
+
                     // Complete the progress bar first
                     if (loaderProgress) {
                         gsap.to(loaderProgress, {
@@ -708,6 +710,8 @@
                                     // Remove loading class from body
                                     document.body.classList.remove('loading');
 
+                                    console.log('Preloader removed, starting logo animation');
+
                                     // Now trigger the logo animation, but only if it hasn't already started
                                     if (typeof animationStarted !== 'undefined' && !animationStarted &&
                                         typeof logoContainer !== 'undefined' && logoContainer) {
@@ -722,89 +726,46 @@
                     }, 400);
                 }
 
-                // Function to check if all critical images are loaded
-                function checkImagesLoaded() {
-                    imagesLoaded++;
-                    console.log(`Image loaded: ${imagesLoaded}/${imagesToLoad.length}`);
-
-                    if (imagesLoaded >= imagesToLoad.length) {
-                        console.log('All images loaded, lifting preloader curtain');
-                        liftPreloaderCurtain();
-                    }
+                // Function to handle hero image load
+                function onHeroImageLoaded() {
+                    console.log('Hero image loaded');
+                    heroImageLoaded = true;
+                    liftPreloaderCurtain();
                 }
 
-                // Add skyline image to the load list if it exists
-                if (skylineImage) {
-                    imagesToLoad.push(skylineImage);
-                    if (skylineImage.complete) {
-                        console.log('Skyline image already loaded');
-                        checkImagesLoaded();
+                // Check if hero image exists and handle its loading
+                if (heroImage) {
+                    console.log('Found hero image, checking if loaded');
+
+                    if (heroImage.complete) {
+                        console.log('Hero image already loaded');
+                        onHeroImageLoaded();
                     } else {
-                        console.log('Waiting for skyline image to load');
-                        skylineImage.onload = checkImagesLoaded;
-                        skylineImage.onerror = checkImagesLoaded; // Count errors as loaded to avoid blocking
+                        console.log('Waiting for hero image to load');
+                        heroImage.onload = onHeroImageLoaded;
+
+                        // Also handle error case to prevent getting stuck
+                        heroImage.onerror = function () {
+                            console.log('Hero image failed to load');
+                            onHeroImageLoaded(); // Proceed anyway
+                        };
                     }
-                }
-
-                // Add preloader logo to the load list if it exists
-                if (preloaderLogo) {
-                    imagesToLoad.push(preloaderLogo);
-                    if (preloaderLogo.complete) {
-                        console.log('Preloader logo already loaded');
-                        checkImagesLoaded();
-                    } else {
-                        console.log('Waiting for preloader logo to load');
-                        preloaderLogo.onload = checkImagesLoaded;
-                        preloaderLogo.onerror = checkImagesLoaded; // Count errors as loaded to avoid blocking
-                    }
-                }
-
-                // Add logo images to the load list if they exist
-                const logoTextPart = document.getElementById('textPartImg');
-                const logoGridPart = document.getElementById('gridPartImg');
-
-                if (logoTextPart) {
-                    imagesToLoad.push(logoTextPart);
-                    if (logoTextPart.complete) {
-                        console.log('Logo text part already loaded');
-                        checkImagesLoaded();
-                    } else {
-                        console.log('Waiting for logo text part to load');
-                        logoTextPart.onload = checkImagesLoaded;
-                        logoTextPart.onerror = checkImagesLoaded;
-                    }
-                }
-
-                if (logoGridPart) {
-                    imagesToLoad.push(logoGridPart);
-                    if (logoGridPart.complete) {
-                        console.log('Logo grid part already loaded');
-                        checkImagesLoaded();
-                    } else {
-                        console.log('Waiting for logo grid part to load');
-                        logoGridPart.onload = checkImagesLoaded;
-                        logoGridPart.onerror = checkImagesLoaded;
-                    }
-                }
-
-                // If no images were found or all images were already loaded,
-                // we need to ensure the preloader eventually lifts
-                if (imagesToLoad.length === 0 || imagesLoaded >= imagesToLoad.length) {
-                    console.log('No images to wait for, lifting preloader curtain after delay');
-                    // Still show preloader for a minimum time for visual effect
+                } else {
+                    console.log('Hero image not found');
+                    // If hero image doesn't exist, show preloader for a minimum time then lift
                     setTimeout(liftPreloaderCurtain, 1500);
                 }
 
                 // Fallback timer in case something goes wrong with image loading
-                const maxWaitTime = 6000; // Maximum wait time in milliseconds
+                const maxWaitTime = 5000; // Maximum wait time in milliseconds
                 setTimeout(function () {
-                    if (preloaderCurtain && preloaderCurtain.style.display !== "none") {
+                    if (!heroImageLoaded) {
                         console.log('Max wait time reached, forcing preloader to lift');
                         liftPreloaderCurtain();
                     }
                 }, maxWaitTime);
 
-                // We need to prevent the logo animation from starting before preloader finishes
+                // Prevent logo animation from starting before preloader finishes
                 if (typeof animateLogoRising !== 'undefined') {
                     const originalAnimateLogoRising = animateLogoRising;
 
