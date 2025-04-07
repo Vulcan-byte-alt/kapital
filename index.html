@@ -654,100 +654,174 @@
     <!-- Add this to your existing JavaScript section -->
     <script>
         // Wait for DOM ready
-        document.addEventListener('DOMContentLoaded', function () {
-            // Add loading class to body
-            document.body.classList.add('loading');
+            document.addEventListener('DOMContentLoaded', function () {
+                // Add loading class to body
+                document.body.classList.add('loading');
 
-            // Get preloader elements
-            const preloaderTop = document.getElementById('preloaderTop');
-            const loaderProgress = document.getElementById('loaderProgress');
-            const preloaderCurtain = document.getElementById('preloaderCurtain');
-            const skylineImage = document.getElementById('skylineImage');
+                // Get preloader elements
+                const preloaderTop = document.getElementById('preloaderTop');
+                const loaderProgress = document.getElementById('loaderProgress');
+                const preloaderCurtain = document.getElementById('preloaderCurtain');
+                const skylineImage = document.getElementById('skylineImage');
+                const preloaderLogo = document.querySelector('#preloaderCurtain .kapital-logo-container img');
 
-            // Start progress animation
-            if (loaderProgress) {
-                // Animate to 80% to show something is happening
-                gsap.to(loaderProgress, {
-                    width: "80%",
-                    duration: 1.5,
-                    ease: "power2.inOut"
-                });
-            }
+                // Keep track of loaded images
+                const imagesToLoad = [];
+                let imagesLoaded = 0;
 
-            // Function to lift the curtain
-            function liftPreloaderCurtain() {
-                // Complete the progress bar first
+                // Start progress animation
                 if (loaderProgress) {
+                    // Animate to 80% to show something is happening
                     gsap.to(loaderProgress, {
-                        width: "100%",
-                        duration: 0.5,
-                        ease: "power2.inOut",
-                        overwrite: true
+                        width: "80%",
+                        duration: 1.5,
+                        ease: "power2.inOut"
                     });
                 }
 
-                // Small delay to show the completed progress
-                setTimeout(() => {
-                    // Animate the curtain lifting up
-                    if (preloaderTop) {
-                        gsap.to(preloaderTop, {
-                            yPercent: -100,
-                            duration: 1.2,
-                            ease: "power3.inOut",
-                            onComplete: function () {
-                                // Remove preloader completely when animation is done
-                                if (preloaderCurtain) {
-                                    preloaderCurtain.style.display = "none";
-                                }
-
-                                // Remove loading class from body
-                                document.body.classList.remove('loading');
-
-                                // Now trigger the logo animation, but only if it hasn't already started
-                                if (!animationStarted && logoContainer) {
-                                    updateImageSizes();
-                                    animateLogoRising();
-                                }
-                            }
+                // Function to lift the curtain
+                function liftPreloaderCurtain() {
+                    // Complete the progress bar first
+                    if (loaderProgress) {
+                        gsap.to(loaderProgress, {
+                            width: "100%",
+                            duration: 0.5,
+                            ease: "power2.inOut",
+                            overwrite: true
                         });
                     }
-                }, 400);
-            }
 
-            // Check if skyline image is already loaded
-            if (skylineImage) {
-                if (skylineImage.complete) {
-                    // Image already loaded, lift the curtain immediately
-                    liftPreloaderCurtain();
-                } else {
-                    // Image still loading, lift when it's done
-                    skylineImage.onload = liftPreloaderCurtain;
+                    // Small delay to show the completed progress
+                    setTimeout(() => {
+                        // Animate the curtain lifting up
+                        if (preloaderTop) {
+                            gsap.to(preloaderTop, {
+                                yPercent: -100,
+                                duration: 1.2,
+                                ease: "power3.inOut",
+                                onComplete: function () {
+                                    // Remove preloader completely when animation is done
+                                    if (preloaderCurtain) {
+                                        preloaderCurtain.style.display = "none";
+                                    }
 
-                    // Fallback in case image fails or takes too long
-                    setTimeout(liftPreloaderCurtain, 5000);
+                                    // Remove loading class from body
+                                    document.body.classList.remove('loading');
+
+                                    // Now trigger the logo animation, but only if it hasn't already started
+                                    if (typeof animationStarted !== 'undefined' && !animationStarted &&
+                                        typeof logoContainer !== 'undefined' && logoContainer) {
+                                        if (typeof updateImageSizes === 'function') {
+                                            updateImageSizes();
+                                        }
+                                        animateLogoRising();
+                                    }
+                                }
+                            });
+                        }
+                    }, 400);
                 }
-            } else {
-                // No skyline image found, lift the curtain anyway
-                liftPreloaderCurtain();
-            }
 
-            // We need to prevent the logo animation from starting before preloader finishes
-            // This is just in case it was set to autostart
-            const originalAnimateLogoRising = window.animateLogoRising;
+                // Function to check if all critical images are loaded
+                function checkImagesLoaded() {
+                    imagesLoaded++;
+                    console.log(`Image loaded: ${imagesLoaded}/${imagesToLoad.length}`);
 
-            if (originalAnimateLogoRising) {
-                // Override the original function
-                window.animateLogoRising = function () {
-                    // Don't start animation while preloader is visible
-                    if (preloaderCurtain && preloaderCurtain.style.display !== "none") {
-                        return;
+                    if (imagesLoaded >= imagesToLoad.length) {
+                        console.log('All images loaded, lifting preloader curtain');
+                        liftPreloaderCurtain();
                     }
+                }
 
-                    // Call the original function
-                    originalAnimateLogoRising();
-                };
-            }
-        });
+                // Add skyline image to the load list if it exists
+                if (skylineImage) {
+                    imagesToLoad.push(skylineImage);
+                    if (skylineImage.complete) {
+                        console.log('Skyline image already loaded');
+                        checkImagesLoaded();
+                    } else {
+                        console.log('Waiting for skyline image to load');
+                        skylineImage.onload = checkImagesLoaded;
+                        skylineImage.onerror = checkImagesLoaded; // Count errors as loaded to avoid blocking
+                    }
+                }
+
+                // Add preloader logo to the load list if it exists
+                if (preloaderLogo) {
+                    imagesToLoad.push(preloaderLogo);
+                    if (preloaderLogo.complete) {
+                        console.log('Preloader logo already loaded');
+                        checkImagesLoaded();
+                    } else {
+                        console.log('Waiting for preloader logo to load');
+                        preloaderLogo.onload = checkImagesLoaded;
+                        preloaderLogo.onerror = checkImagesLoaded; // Count errors as loaded to avoid blocking
+                    }
+                }
+
+                // Add logo images to the load list if they exist
+                const logoTextPart = document.getElementById('textPartImg');
+                const logoGridPart = document.getElementById('gridPartImg');
+
+                if (logoTextPart) {
+                    imagesToLoad.push(logoTextPart);
+                    if (logoTextPart.complete) {
+                        console.log('Logo text part already loaded');
+                        checkImagesLoaded();
+                    } else {
+                        console.log('Waiting for logo text part to load');
+                        logoTextPart.onload = checkImagesLoaded;
+                        logoTextPart.onerror = checkImagesLoaded;
+                    }
+                }
+
+                if (logoGridPart) {
+                    imagesToLoad.push(logoGridPart);
+                    if (logoGridPart.complete) {
+                        console.log('Logo grid part already loaded');
+                        checkImagesLoaded();
+                    } else {
+                        console.log('Waiting for logo grid part to load');
+                        logoGridPart.onload = checkImagesLoaded;
+                        logoGridPart.onerror = checkImagesLoaded;
+                    }
+                }
+
+                // If no images were found or all images were already loaded,
+                // we need to ensure the preloader eventually lifts
+                if (imagesToLoad.length === 0 || imagesLoaded >= imagesToLoad.length) {
+                    console.log('No images to wait for, lifting preloader curtain after delay');
+                    // Still show preloader for a minimum time for visual effect
+                    setTimeout(liftPreloaderCurtain, 1500);
+                }
+
+                // Fallback timer in case something goes wrong with image loading
+                const maxWaitTime = 6000; // Maximum wait time in milliseconds
+                setTimeout(function () {
+                    if (preloaderCurtain && preloaderCurtain.style.display !== "none") {
+                        console.log('Max wait time reached, forcing preloader to lift');
+                        liftPreloaderCurtain();
+                    }
+                }, maxWaitTime);
+
+                // We need to prevent the logo animation from starting before preloader finishes
+                if (typeof animateLogoRising !== 'undefined') {
+                    const originalAnimateLogoRising = animateLogoRising;
+
+                    // Override the original function
+                    window.animateLogoRising = function () {
+                        // Don't start animation while preloader is visible
+                        if (preloaderCurtain && preloaderCurtain.style.display !== "none") {
+                            console.log('Prevented logo animation while preloader is visible');
+                            return;
+                        }
+
+                        // Call the original function
+                        console.log('Starting logo animation after preloader');
+                        originalAnimateLogoRising();
+                    };
+                }
+            });
     </script>
     <!-- Background Elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
